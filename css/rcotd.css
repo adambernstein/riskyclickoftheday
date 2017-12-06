@@ -1,0 +1,10 @@
+.rcotd-popup{
+    position: relative;
+    top: -100px;
+    height: 100px;
+    background: #eee;
+    width: 400px;
+    color: inherit;
+    border: 1px dashed #345657;
+    text-align: center;
+}
