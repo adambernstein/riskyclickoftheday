@@ -1,10 +1,21 @@
-.rcotd-popup{
+.rcotd-container{
     position: relative;
-    top: -100px;
+    top:-120px;
+
+}
+.rcotd-popup{
+    position: absolute;
+    top: 0;
     height: 100px;
     background: #eee;
     width: 400px;
     color: inherit;
     border: 1px dashed #345657;
     text-align: center;
+    z-index: 123456;
+}
+
+/*Override reddit overflow tag for parent elem*/
+.entry{
+    overflow:visible !important;
 }
