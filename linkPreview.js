@@ -1,31 +1,36 @@
 /*Select links in user comments*/
 var commentLinks = document.querySelectorAll('.sitetable .usertext-body a');
+var responseText = '';
 
 commentLinks.forEach(function(link) {
-    link.addEventListener('mouseover', createPopup);
-    link.addEventListener('mouseout', destroyPopup);
+    link.addEventListener('mouseover', createPopup);    
 });
 
 function createPopup(){
     var popupContainer = document.createElement('DIV'),
         popup = document.createElement('DIV'),
-        popText = document.createTextNode('Here\'s some text in a div'),
-        targetUrl = this.attributes.href.value,
-        reqHeaders = new Headers();
+        popText = document.createTextNode('Here\'s some text in a div\n'),
+        popResponseText = document.createTextNode(responseText),
+        targetUrl = this.attributes.href.value;
+    
+    //define Request object
+    var reqHeaders = new Headers();
     reqHeaders.append('Content-Type', 'text/html');
-    var reqInit = { method: 'GET',
-            headers: reqHeaders,
-            mode: 'no-cors',
-            cache: 'default'
-        },
-        reqObj = new Request(targetUrl, reqInit),
-        linkPreview = requestr(reqObj)
-            .then(function(response){
-                return response;
-            }).then(function(response){
-                return response;
-            }).catch(catchErr);
-
+    var reqInit = { 
+        method: 'GET',
+        headers: reqHeaders,
+        mode: 'no-cors',
+        cache: 'default'
+    };
+    var reqObj = new Request(targetUrl, reqInit);
+    
+    /* requestr(reqObj)
+        .then(function(response){
+            return response
+        }).then(function(response){
+            return response
+        }).catch(catchErr);
+    */
     popupContainer.id = 'rcotdContainer';
     popupContainer.className = 'rcotd-container';
     popup.id = 'rcotdDiv';
@@ -33,8 +38,9 @@ function createPopup(){
     this.parentElement.appendChild(popupContainer);
     popupContainer.appendChild(popup);
     popup.appendChild(popText);
-    //popup.appendChild(linkPreview);
+    popup.appendChild(popResponseText);
     
+    document.querySelector('.rcotd-container').addEventListener('click', destroyPopup);
     //@TODO insert target doc (iframe? xhr?)
 
 }
@@ -50,8 +56,8 @@ function destroyPopup(){
  * @TODO rewrite
  */
 function requestr(reqObj){
-    fetch(reqObj).then(function(response) { return response.blob(); }).then(function(myBlob) {
-        console.log(myBlob);
+    fetch(reqObj).then(function(response) { return response.text(); }).then(function(myBlob) {
+        responseText = myBlob;
     });
 
 }
