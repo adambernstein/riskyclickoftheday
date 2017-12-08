@@ -1,35 +1,37 @@
 /*Select links in user comments*/
-var commentLinks = document.querySelectorAll('.sitetable .usertext-body a'),
+let commentLinks = document.querySelectorAll('.sitetable .usertext-body a'),
     responseText = '';    
 
 commentLinks.forEach(function(link) {
     link.addEventListener('mouseover', initPopup);    
 });
 
-function initPopup(){
+function initPopup(obj){
     let rcotd = document.getElementById('rcotdContainer');
     if (rcotd!=null) {
         destroyPopup();
-        buildPopup(this);
+        buildPopup(obj);
     }
-    else buildPopup(this);
+    else buildPopup(obj);
 }
 
 function buildPopup(elem){
-    var popupContainer = document.createElement('DIV'),
+    let popupContainer = document.createElement('DIV'),
         popup = document.createElement('DIV'),
         popText = document.createTextNode('Here\'s some text in a div'),
         popResponseText = document.createTextNode(responseText),
-        targetUrl = elem.attributes.href.value,
-        linkPreviewElement = document.createElement('DIV'); 
-    
+        targetUrl = elem.currentTarget.attributes.href.value,
+        linkPreviewElement = document.createElement('DIV'),
+        xPos = elem.clientX - 20;
+    xPos+="px";
     popupContainer.id = 'rcotdContainer';
     popupContainer.className = 'rcotd-container';
+    popupContainer.style.left = xPos;
     popup.id = 'rcotdDiv';
     popup.className = 'rcotd-popup';
     linkPreviewElement.id='linkPreview';
     linkPreviewElement.innerHTML = getUrlContent(targetUrl);
-    elem.parentElement.appendChild(popupContainer);
+    elem.currentTarget.insertAdjacentElement('afterend', popupContainer);
     popupContainer.appendChild(popup);
     popup.appendChild(popText);
     popup.appendChild(popResponseText);
@@ -52,15 +54,15 @@ function destroyPopup(event){
 
 
 function getUrlContent(url){
-    var reqHeaders = new Headers();
+    let reqHeaders = new Headers();
     reqHeaders.append('Content-Type', 'text/html');
-    var reqInit = { 
+    let reqInit = {
         method: 'GET',
         headers: reqHeaders,
         mode: 'no-cors',
         cache: 'default'
     };
-    var reqObj = new Request(url, reqInit),
+    let reqObj = new Request(url, reqInit),
         debugNode = '<a href=\'somelink.com\'>Some parsed html</a><p>text</p>',
         parser = new DOMParser;
     
@@ -85,7 +87,7 @@ function buildRequest(){
         }).catch(catchErr);
 }
 function parseResponse(response) {
-    var parsedObj = JSON.parse(response);
+    let parsedObj = JSON.parse(response);
     console.log(parsedObj);
     return parsedObj;
 }
