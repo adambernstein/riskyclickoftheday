@@ -35,14 +35,19 @@ function buildPopup(elem){
     popup.appendChild(popResponseText);
     popup.appendChild(linkPreviewElement);    
     document.querySelector('body').addEventListener('click', destroyPopup);
+    document.querySelector('#rcotdDiv').addEventListener('mouseleave', destroyPopup);
 }
 
-function destroyPopup(){
+function destroyPopup(event){
     let rcotdElement = document.getElementById('rcotdContainer');
     if (rcotdElement) {
         rcotdElement.parentNode.removeChild(rcotdElement);
     }
 }
+
+// function timeoutDestroy(){
+//     window.setTimeout(destroyPopup, 2000);
+// }
 
 
 
