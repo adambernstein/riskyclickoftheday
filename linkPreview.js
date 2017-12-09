@@ -22,21 +22,25 @@ function buildPopup(elem){
         popResponseText = document.createTextNode(responseText),
         targetUrl = elem.currentTarget.attributes.href.value,
         linkPreviewElement = document.createElement('DIV'),
-        xPos = elem.clientX - 20;
+        xPos = elem.pageX,
+        yPos = elem.pageY-110;
     xPos+="px";
+    yPos+="px";
     popupContainer.id = 'rcotdContainer';
     popupContainer.className = 'rcotd-container';
     popupContainer.style.left = xPos;
+    popupContainer.style.top = yPos;
     popup.id = 'rcotdDiv';
     popup.className = 'rcotd-popup';
     linkPreviewElement.id='linkPreview';
     linkPreviewElement.innerHTML = getUrlContent(targetUrl);
-    elem.currentTarget.insertAdjacentElement('afterend', popupContainer);
+    elem.currentTarget.parentElement.insertAdjacentElement('afterend', popupContainer);
     popupContainer.appendChild(popup);
     popup.appendChild(popText);
     popup.appendChild(popResponseText);
     popup.appendChild(linkPreviewElement);    
     document.querySelector('body').addEventListener('click', destroyPopup);
+    document.querySelector('#rcotdDiv').addEventListener('mousemove', trackMouse);
     document.querySelector('#rcotdDiv').addEventListener('mouseleave', destroyPopup);
 }
 
@@ -45,6 +49,14 @@ function destroyPopup(event){
     if (rcotdElement) {
         rcotdElement.parentNode.removeChild(rcotdElement);
     }
+}
+
+function trackMouse(p){
+    let x = p.pageX, y = p.pageY;
+    x+="px";
+    y+="px";
+    p.targetElement.style.left = x;
+    p.targetElement.style.top = y;
 }
 
 // function timeoutDestroy(){
