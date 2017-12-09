@@ -34,10 +34,11 @@ function buildPopup(elem){
     popup.id = 'rcotdDiv';
     popup.className = 'rcotd-popup';
     linkPreviewElement.id='linkPreview';
-    linkPreviewElement.innerHTML = getUrlContent(targetUrl);
+    /*linkPreviewElement.innerHTML = getUrlContent(targetUrl);*/
+    linkPreviewElement.innerHTML = '<img class = \"preview-img\" src=\"' + targetUrl + '\">';
     elem.currentTarget.parentElement.insertAdjacentElement('afterend', popupContainer);
     popupContainer.appendChild(popup);
-    popup.appendChild(popText);
+    //popup.appendChild(popText);
     popup.appendChild(popResponseText);
     popup.appendChild(linkPreviewElement);
     document.querySelector('body').addEventListener('mousemove', trackMouse);
@@ -67,19 +68,21 @@ function trackMouse(p){
 
 
 function getUrlContent(url){
-    let reqHeaders = new Headers();
-    reqHeaders.append('Content-Type', 'text/html');
+    let reqHeaders = new Headers(), r= '';
+    reqHeaders.append('Content-Type', 'image/jpeg');
     let reqInit = {
         method: 'GET',
         headers: reqHeaders,
         mode: 'no-cors',
         cache: 'default'
     };
-    let reqObj = new Request(url, reqInit),
-        debugNode = '<a href=\'somelink.com\'>Some parsed html</a><p>text</p>',
-        parser = new DOMParser;
-    
-    return debugNode;
+    let reqObj = new Request(url, reqInit);
+    fetch(reqObj)
+        .then(response => response.blob())
+        .then(function(blob){
+            r = '<img src =\"' + URL.createObjectURL(blob) + '\" >';
+        });
+    return r;
 }
 
 /*
