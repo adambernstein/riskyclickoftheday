@@ -1,7 +1,7 @@
 .rcotd-container{
     position: absolute;
     top:-120px;
-    transition: all .4s;
+    /*transition: all .05s;*/
 
 }
 .rcotd-popup{

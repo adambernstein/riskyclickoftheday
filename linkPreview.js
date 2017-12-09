@@ -1,7 +1,8 @@
 /*Select links in user comments*/
 let commentLinks = document.querySelectorAll('.sitetable .usertext-body a'),
-    responseText = '';    
+    responseText = '';
 
+document.querySelector('body').addEventListener('click', destroyPopup);
 commentLinks.forEach(function(link) {
     link.addEventListener('mouseover', initPopup);    
 });
@@ -38,25 +39,25 @@ function buildPopup(elem){
     popupContainer.appendChild(popup);
     popup.appendChild(popText);
     popup.appendChild(popResponseText);
-    popup.appendChild(linkPreviewElement);    
-    document.querySelector('body').addEventListener('click', destroyPopup);
-    document.querySelector('#rcotdDiv').addEventListener('mousemove', trackMouse);
-    document.querySelector('#rcotdDiv').addEventListener('mouseleave', destroyPopup);
+    popup.appendChild(linkPreviewElement);
+    document.querySelector('body').addEventListener('mousemove', trackMouse);
+    document.querySelector('#rcotdContainer').parentElement.addEventListener('mouseleave', destroyPopup);
 }
 
 function destroyPopup(event){
     let rcotdElement = document.getElementById('rcotdContainer');
     if (rcotdElement) {
         rcotdElement.parentNode.removeChild(rcotdElement);
+        document.querySelector('body').removeEventListener('mousemove', trackMouse);
     }
 }
 
 function trackMouse(p){
-    let x = p.pageX, y = p.pageY;
+    let x = p.pageX, y = p.pageY-110;
     x+="px";
     y+="px";
-    p.targetElement.style.left = x;
-    p.targetElement.style.top = y;
+    document.querySelector('#rcotdContainer').style.left = x;
+    document.querySelector('#rcotdContainer').style.top = y;
 }
 
 // function timeoutDestroy(){
